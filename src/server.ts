@@ -29,6 +29,9 @@ app.use('/auth',authRouter)
 import postRouter from './routes/post_route.js'
 app.use('/post',postRouter)
 
+import post2Router from './routes/post2_route.js'
+app.use('/post2',post2Router)
+
 import swaggerUI from "swagger-ui-express"
 import swaggerJsDoc from "swagger-jsdoc"
 if (process.env.NODE_ENV == "development") {
