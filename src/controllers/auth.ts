@@ -31,6 +31,7 @@ const register = async (req:Request ,res:Response)=>{
             'password': encryptedPwd
         })
         await newUser.save()
+        console.log("register success")
         return res.status(200).send({
             'email' : email,
             '_id' : newUser._id
