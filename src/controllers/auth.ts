@@ -11,15 +11,15 @@ function sendError(res:Response, error:string){
 }
 
 const register = async (req:Request ,res:Response)=>{
-    const email = req.body.email
+    const username = req.body.username
     const password = req.body.password
 
-    if (email == null || password == null){
-        return sendError(res, 'please provide valid email and password')
+    if (username == null || password == null){
+        return sendError(res, 'please provide valid username and password')
     }
 
     try{
-        const user = await User.findOne({'email' : email})
+        const user = await User.findOne({'username' : username})
         if (user != null){
             return sendError(res,'user already registered, try a different name')
         }
@@ -27,13 +27,13 @@ const register = async (req:Request ,res:Response)=>{
         const salt = await bcrypt.genSalt(10)
         const encryptedPwd = await bcrypt.hash(password,salt)
         const newUser = new User({
-            'email': email,
+            'username': username,
             'password': encryptedPwd
         })
         await newUser.save()
         console.log("register success")
         return res.status(200).send({
-            'email' : email,
+            'username' : username,
             '_id' : newUser._id
         })
     }catch(err){
@@ -52,30 +52,34 @@ async function generateTokens(userId:string){
         process.env.REFRESH_TOKEN_SECRET
     )
 
-    return {'accessToken':accessToken, 'refreshToken':refreshToken}
+    return {'accessToken':accessToken, 'refreshToken':refreshToken, 'username':'', 'image':'', 'id': userId}
 }
 
 const login = async (req:Request ,res:Response)=>{
-    const email = req.body.email
+    const username = req.body.username
     const password = req.body.password
-    if (email == null || password == null){
-        return sendError(res, 'please provide valid email and password')
+    if (username == null || password == null){
+        return sendError(res, 'please provide valid username and password')
     }
 
     try{
-        const user = await User.findOne({'email' : email})
+        const user = await User.findOne({'username' : username})
         if (user == null) return sendError(res,'incorrect user or password')
 
         const match = await bcrypt.compare(password, user.password)
         if(!match) return sendError(res,'incorrect user or password')
 
         const tokens = await generateTokens(user._id.toString())
+        tokens.username = user.username
+        tokens.id = user._id.toString()
+        console.log(user._id.toString());
+        
 
         if (user.refresh_tokens == null) user.refresh_tokens = [tokens.refreshToken]
         else user.refresh_tokens.push(tokens.refreshToken)
         await user.save()
-
-        return res.status(200).send(tokens)
+        const newObj = Object.assign(tokens, {_id: user._id.toString()})
+        return res.status(200).send(newObj)
     }catch (err){
         console.log("error: " + err)
         return sendError(res,'fail checking user')
@@ -149,7 +153,7 @@ const authenticateMiddleware = async (req:Request ,res:Response, next: NextFunct
     try{
         const user = <TokenInfo>jwt.verify(token,process.env.ACCESS_TOKEN_SECRET)
         req.body.userId = user.id
-        console.log("token user: " + user)
+        //console.log("token user: " + user.id)
         return next()
     }catch(err){
         return sendError(res,'fail validating token')

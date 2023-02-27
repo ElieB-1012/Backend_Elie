@@ -5,9 +5,16 @@ const postSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    sender: {
+    senderId: {
         type: String,
         required: true
+    },
+    senderName: {
+        type: String,
+        required: true
+    },
+    photo: {
+        type: String,
     }
 })
 
