@@ -102,7 +102,8 @@ router.get('/:id',auth.authenticateMiddleware,async (req, res) => {
         const request_ = {
             body: {
                 id: req.params.id
-            }
+            },
+            params: req.params
         }
         const response = await post.getPostById(request.fromRestRequest(request_))
         response.sendRestResponse(res)

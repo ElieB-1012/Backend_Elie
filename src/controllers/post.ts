@@ -12,7 +12,7 @@ const getAllPosts = async (req = null)=>{
         if (req == null || req.body.sender == null) {
             posts = await Post.find()
         } else {
-            posts = await Post.find({'sender': req.body.sender})
+            posts = await Post.find({'senderId': req.body.sender})
         }
         return new response(posts, null, null)
     } catch (err) {
@@ -22,8 +22,8 @@ const getAllPosts = async (req = null)=>{
 
 const getPostById = async (req)=>{
     try {
-        console.log('get there ')
-        const post = await Post.findById(req.params._id)
+        console.log('get there ' + JSON.stringify(req))
+        const post = await Post.findById(req.params.id)
         return new response(post, null, null)
     } catch (err) {
         return new response(null, null, new error(400, err.message))
