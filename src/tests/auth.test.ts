@@ -9,16 +9,16 @@ const userPassword = "12345"
 let accessToken = ''
 let refreshToken = ''
 
-beforeAll(async ()=>{
-    await Post.remove()
-    await User.remove()
-})
+// beforeAll(async ()=>{
+//     await Post.remove()
+//     await User.remove()
+// })
 
-afterAll(async ()=>{
-    await Post.remove()
-    await User.remove()
-    mongoose.connection.close()
-})
+// afterAll(async ()=>{
+//     await Post.remove()
+//     await User.remove()
+//     mongoose.connection.close()
+// })
 
 describe("Auth Tests", ()=>{
     test("Not aquthorized attempt test",async ()=>{
@@ -28,7 +28,7 @@ describe("Auth Tests", ()=>{
 
     test("Register test",async ()=>{
         const response = await request(app).post('/auth/register').send({
-            "email": userEmail,
+            "username": userEmail,
             "password": userPassword 
         })
         expect(response.statusCode).toEqual(200)
@@ -36,7 +36,7 @@ describe("Auth Tests", ()=>{
 
     test("Login test wrog password",async ()=>{
         const response = await request(app).post('/auth/login').send({
-            "email": userEmail,
+            "username": userEmail,
             "password": userPassword + '4'
         })
         expect(response.statusCode).not.toEqual(200)
@@ -46,7 +46,7 @@ describe("Auth Tests", ()=>{
 
     test("Login test",async ()=>{
         const response = await request(app).post('/auth/login').send({
-            "email": userEmail,
+            "username": userEmail,
             "password": userPassword 
         })
         expect(response.statusCode).toEqual(200)
