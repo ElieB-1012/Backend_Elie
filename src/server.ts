@@ -36,6 +36,9 @@ app.use('/post2',post2Router)
 import fileRouter from './routes/file_routes.js'
 app.use('/file', fileRouter)
 
+import userRouter from './routes/user_route.js'
+app.use('/user', userRouter)
+
 import swaggerUI from "swagger-ui-express"
 import swaggerJsDoc from "swagger-jsdoc"
 if (process.env.NODE_ENV == "development") {

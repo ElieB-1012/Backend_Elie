@@ -1,8 +1,10 @@
 
 import Post from '../models/post_model'
-import response from "../socket/response"
+//import response from "../socket/response"
 import error from "../socket/error"
 import request from "../socket/request"
+import { response, Error } from '../Utils'
+import {ObjectId} from 'mongodb'
 
 
 
@@ -53,13 +55,26 @@ const putPostById = async (req)=>{
     try {
         console.log('req update')
         console.log(req)
-        const post = await Post.findByIdAndUpdate(req.params.id, req.body, { new: true })
-        console.log(post)
+        const id = req.params.id
+        const message = req.body.message
+        const image = req.body.image
+        const post = await Post.updateOne({_id: new ObjectId(id)}, {$set :{photo: image, message: message}})
+
+        console.log("" + post)
         return new response(post, req.userId, null)
     } catch (err) {
         return new response(null, req.userId, new error(400, err.message))
     }
 }
 
+const deletePost = async (req) => {
+    try {
+        const post = await Post.deleteOne({_id: new ObjectId(req.params.id)})
+        console.log(`Post ${req.params.id} was deleted`);
+        return new response(post, req.userId, null)
+    } catch(err){
+        console.log('Fail to delete');
+    }
+}
 
-export = {getAllPosts, addNewPost, getPostById, putPostById}
+export = {getAllPosts, addNewPost, getPostById, putPostById, deletePost}

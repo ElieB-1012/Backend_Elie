@@ -34,7 +34,8 @@ const register = async (req:Request ,res:Response)=>{
         console.log("register success")
         return res.status(200).send({
             'username' : username,
-            '_id' : newUser._id
+            '_id' : newUser._id,
+            'image': ''
         })
     }catch(err){
         return sendError(res,'fail ...')
@@ -78,7 +79,7 @@ const login = async (req:Request ,res:Response)=>{
         if (user.refresh_tokens == null) user.refresh_tokens = [tokens.refreshToken]
         else user.refresh_tokens.push(tokens.refreshToken)
         await user.save()
-        const newObj = Object.assign(tokens, {_id: user._id.toString()})
+        const newObj = Object.assign(tokens, {_id: user._id.toString(), image: user.image})
         return res.status(200).send(newObj)
     }catch (err){
         console.log("error: " + err)
