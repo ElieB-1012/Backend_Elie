@@ -24,19 +24,19 @@ db.once('open',()=>{console.log('connected to mongo DB')})
 app.use('/public',express.static('public'))
 app.use('/uploads',express.static('uploads'))
 
-import authRouter from './routes/auth_route.js'
+import authRouter from './routes/auth_route'
 app.use('/auth',authRouter)
 
-import postRouter from './routes/post_route.js'
+import postRouter from './routes/post_route'
 app.use('/post',postRouter)
 
-import post2Router from './routes/post2_route.js'
+import post2Router from './routes/post2_route'
 app.use('/post2',post2Router)
 
-import fileRouter from './routes/file_routes.js'
+import fileRouter from './routes/file_routes'
 app.use('/file', fileRouter)
 
-import userRouter from './routes/user_route.js'
+import userRouter from './routes/user_route'
 app.use('/user', userRouter)
 
 import swaggerUI from "swagger-ui-express"

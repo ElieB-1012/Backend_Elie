@@ -14,11 +14,10 @@ let refreshToken = ''
 //     await User.remove()
 // })
 
-// afterAll(async ()=>{
-//     await Post.remove()
-//     await User.remove()
-//     mongoose.connection.close()
-// })
+afterAll(async ()=>{
+    await User.remove({ username: userEmail })
+    mongoose.connection.close()
+})
 
 describe("Auth Tests", ()=>{
     test("Not aquthorized attempt test",async ()=>{

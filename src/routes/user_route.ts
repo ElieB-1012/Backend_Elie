@@ -33,8 +33,8 @@
 
 import express from 'express'
 const router = express.Router()
-import user from '../controllers/user.js'
-import auth from '../controllers/auth.js'
+import user from '../controllers/user'
+import auth from '../controllers/auth'
 import { Request } from '../Utils'
 
 

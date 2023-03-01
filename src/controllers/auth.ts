@@ -28,7 +28,8 @@ const register = async (req:Request ,res:Response)=>{
         const encryptedPwd = await bcrypt.hash(password,salt)
         const newUser = new User({
             'username': username,
-            'password': encryptedPwd
+            'password': encryptedPwd,
+            'image': ''
         })
         await newUser.save()
         console.log("register success")
